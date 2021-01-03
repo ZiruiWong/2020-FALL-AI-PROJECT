@@ -12,11 +12,11 @@ class ChatBot:
 
     def loadTrainData(self):
         # 取data1的问答对
-        train1 = pd.read_excel('data/data1.xlsx').iloc[:, :2]
+        train1 = pd.read_excel('data/data1.xlsx',engine='openpyxl').iloc[:, :2]
         train1.columns = ["question", "answer"]
 
         # 取data2的问答对
-        train2 = pd.read_excel('data/data2.xlsx').iloc[:, :2]
+        train2 = pd.read_excel('data/data2.xlsx',engine='openpyxl').iloc[:, :2]
         train2.columns = ["question", "answer"]
 
         train = pd.concat([train1, train2], axis=0, ignore_index=True)  # 拼接数据
