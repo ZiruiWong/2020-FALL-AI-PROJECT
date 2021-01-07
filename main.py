@@ -43,7 +43,7 @@ class ChatBot:
         # TODO:添加其他的数据处理
 
         # 保存处理之后的数据为json格式
-        train.to_csv('data/qa.csv',header=0,index=0,encoding='utf_8_sig')  #不保存列名,行index，使用utf-8编码
+        #train.to_excel('data/qa.xlsx',header=0,index=0,encoding='utf_8_sig')  #不保存列名,行index，使用utf-8编码
         train.to_json('data/train.txt')
 
     def loadTestData(self, loadWay=0):
@@ -61,7 +61,7 @@ class ChatBot:
     def read_corpus(self):
         self.qList = []
         self.aList = []
-        data = pd.read_csv('./data/qa.csv', header=None).astype(str)
+        data = pd.read_json('./data/train.txt').astype(str)
         data_ls = np.array(data).tolist()
         for t in data_ls:
             self.qList.append(t[0])
