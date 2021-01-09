@@ -109,7 +109,7 @@ def fileMode(cb, s2w, tfidf):
 
         time1 = time.time()
         for i in range(cb.testSet.shape[0]):
-            print("          ", i, "/", cb.testSet.shape[0] - 1)
+            #print("          ", i, "/", cb.testSet.shape[0] - 1)
             question_k, score = tfidf.similarity_k(cutSentences[i], 5)
             cb.testSet.iloc[i, 1] = cb.aList[question_k[0]]
             cb.testSet.iloc[i, 2] = score[0]

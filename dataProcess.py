@@ -1,21 +1,22 @@
 import sys
 import unicodedata as ud
 import pkuseg
+import jieba
 
 
 class sentence2word:
     def __init__(self):
-        self.stopwords = [line.strip() for line in open('./dic/stopword.txt', 'rb').readlines()]
+        self.stopwords = [line.strip() for line in open('./dic/stopword.txt', 'r',encoding = 'utf-8').readlines()]
         self.punctuation = dict.fromkeys(i for i in range(sys.maxunicode) if ud.category(chr(i)).startswith('P'))  # 符号集
-        self.seg = pkuseg.pkuseg()
-
-
+        #self.seg = pkuseg.pkuseg()
+        jieba.load_userdict('./dic/dictionary.txt')
 def cut1Sentence(sentence, s2w):
     # print(sentence)
     sentence = sentence.strip()  # 去除字符串两端空格
     sentence = sentence.translate(s2w.punctuation)  # 去除标点符号
     sentence = changeChineseNumToArab(sentence)
-    seg_list = s2w.seg.cut(sentence)
+    #seg_list = s2w.seg.cut(sentence)
+    seg_list = jieba.lcut_for_search(sentence)
     results = []
     for word in seg_list:
         if word not in s2w.stopwords:

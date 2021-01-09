@@ -11,13 +11,13 @@ class tfidf_model:
 
     def modelGene(self, min_frequency=1):
 
-        frequency = defaultdict(int)
+        '''frequency = defaultdict(int)
         for sentence in self.cutSentences:
             for word in sentence:
                 frequency[word] += 1
         self.cutSentences = [[word for word in sentence if frequency[word] > min_frequency] for sentence in
                              self.cutSentences]
-
+        '''
         self.dictionary = corpora.Dictionary(self.cutSentences)
         self.cutSentences = [self.dictionary.doc2bow(sentence) for sentence in self.cutSentences]
         self.model = models.TfidfModel(self.cutSentences)
