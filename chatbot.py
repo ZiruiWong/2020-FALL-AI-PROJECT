@@ -91,10 +91,10 @@ def questionMode(cb, s2w, tfidf):
             break
         time1 = time.time()
         words = cut1Sentence(question, s2w)
-        question_k = tfidf.similarity_k(words, 5)
-        print("[ChatBot]: Answer： {}".format(cb.aList[question_k[0][0]]))
-        for idx, score in zip(*question_k):
-            print("           related questions： {},                score： {}".format(cb.qList[idx], score))
+        question_k, score = tfidf.similarity_k(words, 5)
+        print("[ChatBot]: Answer：",cb.aList[question_k[0]])
+        for i in range(5):
+            print("           related questions",cb.qList[question_k[i]],"score：",score[i])
         time2 = time.time()
         cost = time2 - time1
         print('           Time cost: {} s'.format(cost))
@@ -128,7 +128,6 @@ if __name__ == '__main__':
     print("===========TEST BEGIN===========")
     print("[ChatBot]: Hi, I'm Winter Olympic Chatbot >-<")
     print("[ChatBot]: Do you want to use an existing model?")
-    '''
     cb, s2w, tfidf = preProcess()
 
     print("[ChatBot]: Do you want to ask questions or use a file?")
@@ -139,19 +138,4 @@ if __name__ == '__main__':
     else:
         fileMode(cb, s2w, tfidf)
     
-    '''
 
-    train1 = pd.read_excel('data/data1.xlsx', engine='openpyxl').iloc[:, :2]
-    train1.columns = ["question", "answer"]
-
-    # 取data2的问答对
-    train2 = pd.read_excel('data/data2.xlsx', engine='openpyxl').iloc[:, :2]
-    train2.columns = ["question", "answer"]
-
-    # 数据处理
-    # 将数据进行拼接 并去除问题重复数据
-    train = pd.concat([train1, train2], axis=0, ignore_index=True)  # 拼接数据
-    train.dropna(inplace=True)
-    train.drop_duplicates(subset="question", keep='first', inplace=True)  # 数据去重
-    train.reset_index(inplace=True)
-    print(list(train['question']))
