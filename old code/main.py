@@ -9,7 +9,6 @@ import codecs
 from Similarity import *
 
 
-
 class ChatBot:
     def __init__(self, trainSet=None, testSet=None):
         self.trainSet = trainSet
@@ -24,16 +23,14 @@ class ChatBot:
                 break
             self.stopwords.add(line)
         file_obj.close()
-        
-    
 
     def loadTrainData(self):
         # 取data1的问答对
-        train1 = pd.read_excel('data/data1.xlsx',engine='openpyxl').iloc[:, :2]
+        train1 = pd.read_excel('data/data1.xlsx', engine='openpyxl').iloc[:, :2]
         train1.columns = ["question", "answer"]
 
         # 取data2的问答对
-        train2 = pd.read_excel('data/data2.xlsx',engine='openpyxl').iloc[:, :2]
+        train2 = pd.read_excel('data/data2.xlsx', engine='openpyxl').iloc[:, :2]
         train2.columns = ["question", "answer"]
 
         train = pd.concat([train1, train2], axis=0, ignore_index=True)  # 拼接数据
@@ -43,7 +40,7 @@ class ChatBot:
         # TODO:添加其他的数据处理
 
         # 保存处理之后的数据为json格式
-        #train.to_excel('data/qa.xlsx',header=0,index=0,encoding='utf_8_sig')  #不保存列名,行index，使用utf-8编码
+        # train.to_excel('data/qa.xlsx',header=0,index=0,encoding='utf_8_sig')  #不保存列名,行index，使用utf-8编码
         train.to_json('data/train.txt')
 
     def loadTestData(self, loadWay=0):
@@ -58,6 +55,7 @@ class ChatBot:
             self.testSet = self.trainSet.sample(frac=0.2, replace=False).iloc[:, :1]
         else:
             self.testSet = pd.read_json('data/train.txt')
+
     def read_corpus(self):
         self.qList = []
         self.aList = []
@@ -66,9 +64,9 @@ class ChatBot:
         for t in data_ls:
             self.qList.append(t[0])
             self.aList.append(t[1])
-    
+
     # 对句子分词
-    def cut(self,sentences,stopword=True):
+    def cut(self, sentences, stopword=True):
         seg_list = jieba.cut_for_search(sentences)
         results = []
         for seg in seg_list:
@@ -76,12 +74,14 @@ class ChatBot:
                 continue
             results.append(seg)
         return results
+
+
 class Sentence(object):
 
-    def __init__(self,cb,sentence,id=0):
+    def __init__(self, cb, sentence, id=0):
         self.id = id
         self.origin_sentence = sentence
-        self.cuted_sentence = ChatBot.cut(cb,self.origin_sentence)
+        self.cuted_sentence = ChatBot.cut(cb, self.origin_sentence)
 
     # 设置该句子得分
     def set_score(self, score):
@@ -91,11 +91,11 @@ class Sentence(object):
 if __name__ == '__main__':
     cb = ChatBot()
     cb.loadTrainData()
-    cb.read_corpus()#生成问题以及答案的list
-    #print('1')
-    ss = SentenceSimilarity(cb,cb.qList)
-    #print('1')
-    ss.TfidfModel()         # tfidf模型
+    cb.read_corpus()  # 生成问题以及答案的list
+    # print('1')
+    ss = SentenceSimilarity(cb, cb.qList)
+    # print('1')
+    ss.TfidfModel()  # tfidf模型
     while True:
         question = input("请输入问题(q退出): ")
         if question == 'q':
@@ -108,5 +108,3 @@ if __name__ == '__main__':
         time2 = time.time()
         cost = time2 - time1
         print('Time cost: {} s'.format(cost))
-
-    
