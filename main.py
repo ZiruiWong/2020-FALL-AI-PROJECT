@@ -14,7 +14,7 @@ class ChatBot:
     def __init__(self, trainSet=None, testSet=None):
         self.trainSet = trainSet
         self.testSet = testSet
-        jieba.load_userdict('./dic/dictionary.txt')
+        #jieba.load_userdict('./dic/dictionary.txt')
         self.stopwords = set()
         file_obj = codecs.open("./dic/stopword.txt", 'r', 'utf-8')
         while True:
