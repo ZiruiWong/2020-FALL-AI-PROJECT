@@ -5,7 +5,7 @@ import pkuseg
 
 class sentence2word:
     def __init__(self):
-        self.stopwords = [line.strip() for line in open('./dic/stopword.txt', 'r').readlines()]
+        self.stopwords = [line.strip() for line in open('./dic/stopword.txt', 'rb').readlines()]
         self.punctuation = dict.fromkeys(i for i in range(sys.maxunicode) if ud.category(chr(i)).startswith('P'))  # 符号集
         self.seg = pkuseg.pkuseg()
 
