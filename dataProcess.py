@@ -49,9 +49,9 @@ def cutAllSentences(sentences, s2w):
 
 def chinese2digits(uchars_chinese):
     """
-    将字符串中的中文汉字转化为阿拉伯数字
+    将中文汉字转化为阿拉伯数字
     :param uchars_chinese:
-    :return:
+    :return: digits
     """
     common_used_numerals = {'零': 0, '一': 1, '二': 2, '两': 2, '三': 3, '四': 4, '五': 5, '六': 6, '七': 7, '八': 8, '九': 9,
                             '十': 10, '百': 100, '千': 1000, '万': 10000, '亿': 100000000}
@@ -77,9 +77,9 @@ def chinese2digits(uchars_chinese):
 
 def changeChineseNumToArab(oriStr):
     """
-
+    将字符串中的中文数字转换为阿拉伯数字
     :param oriStr:
-    :return:
+    :return: 所有数字均为阿拉伯数字的字符串
     """
     num_str_start_symbol = ['一', '二', '两', '三', '四', '五', '六', '七', '八', '九', '十']
     more_num_str_symbol = ['零', '一', '二', '两', '三', '四', '五', '六', '七', '八', '九', '十', '百', '千', '万', '亿']
