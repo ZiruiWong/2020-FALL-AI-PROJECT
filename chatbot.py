@@ -3,6 +3,7 @@ import time
 import pickle
 from dataProcess import *
 from tfidf import *
+import json
 
 
 class ChatBot:
@@ -142,7 +143,11 @@ def fileMode(cb, s2w, tfidf):
             testSet.iloc[i, 7] = cb.qList[question_k[4]]
         print('           Time cost: ', time.time() - time1)
         testSet.to_excel("excel.xlsx")
-        testSet[["question", "answer"]].to_json("testAnswer.json", orient='table')
+        jsonSet = testSet[["question", "answer"]].to_json(orient='records',force_ascii=False,lines = True);
+        filename='testAnswer.json'
+        with open(filename,'w',encoding='utf-8') as file_obj:
+            json.dump(jsonSet,file_obj,ensure_ascii=False,sort_keys=False, indent=4)
+        #testSet[["question", "answer"]].to_json("testAnswer.json",orient='table')
         print("[ChatBot]: Success store data to 'testAnswer.json'. >-<")
 
 
