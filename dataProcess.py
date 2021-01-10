@@ -1,22 +1,35 @@
 import sys
 import unicodedata as ud
 import pkuseg
-import jieba
 
 
 class sentence2word:
     def __init__(self):
-        self.stopwords = [line.strip() for line in open('./dic/stopword.txt', 'r',encoding = 'utf-8').readlines()]
-        self.punctuation = dict.fromkeys(i for i in range(sys.maxunicode) if ud.category(chr(i)).startswith('P'))  # 符号集
+        """
+        准备分词需要词库
+        stopwords: 停止词
+        punctuation： 标点符号集
+        seg：分词准备
+        """
+        self.stopwords = [line.strip() for line in open('./dic/stopword.txt', 'r', encoding='utf-8').readlines()]
+        self.punctuation = dict.fromkeys(i for i in range(sys.maxunicode) if ud.category(chr(i)).startswith('P'))
         self.seg = pkuseg.pkuseg()
-        #jieba.load_userdict('./dic/dictionary.txt')
+
+
 def cut1Sentence(sentence, s2w):
-    # print(sentence)
+    """
+    对一个字符串进行分词
+    :param sentence: 字符串
+    :param s2w: sentence2word类
+    :return:
+    """
+
     sentence = sentence.strip()  # 去除字符串两端空格
     sentence = sentence.translate(s2w.punctuation)  # 去除标点符号
-    sentence = changeChineseNumToArab(sentence)
-    seg_list = s2w.seg.cut(sentence)
-    #seg_list = jieba.lcut_for_search(sentence)
+    sentence = changeChineseNumToArab(sentence)  # 将字符串中的中文数字转化为阿拉伯数字
+    seg_list = s2w.seg.cut(sentence)  # 进行分词
+
+    # 去除停止词
     results = []
     for word in seg_list:
         if word not in s2w.stopwords:
@@ -25,9 +38,21 @@ def cut1Sentence(sentence, s2w):
 
 
 def cutAllSentences(sentences, s2w):
+    """
+    对字符串数组进行分词
+    :param sentences: 字符串数组
+    :param s2w: sentence2word类
+    :return:
+    """
     return [cut1Sentence(sentence, s2w) for sentence in sentences]
 
+
 def chinese2digits(uchars_chinese):
+    """
+    将字符串中的中文汉字转化为阿拉伯数字
+    :param uchars_chinese:
+    :return:
+    """
     common_used_numerals = {'零': 0, '一': 1, '二': 2, '两': 2, '三': 3, '四': 4, '五': 5, '六': 6, '七': 7, '八': 8, '九': 9,
                             '十': 10, '百': 100, '千': 1000, '万': 10000, '亿': 100000000}
     total = 0
@@ -40,7 +65,6 @@ def chinese2digits(uchars_chinese):
                 total = total + val
             else:
                 r = r * val
-                # total =total + r * x
         elif val >= 10:
             if val > r:
                 r = val
@@ -49,23 +73,27 @@ def chinese2digits(uchars_chinese):
         else:
             total = total + r * val
     return total
- 
+
+
 def changeChineseNumToArab(oriStr):
-    num_str_start_symbol = ['一', '二', '两', '三', '四', '五', '六', '七', '八', '九',
-                        '十']
+    """
+
+    :param oriStr:
+    :return:
+    """
+    num_str_start_symbol = ['一', '二', '两', '三', '四', '五', '六', '七', '八', '九', '十']
     more_num_str_symbol = ['零', '一', '二', '两', '三', '四', '五', '六', '七', '八', '九', '十', '百', '千', '万', '亿']
-    lenStr = len(oriStr);
+    lenStr = len(oriStr)
     aProStr = ''
     if lenStr == 0:
-        return aProStr;
- 
-    hasNumStart = False;
+        return aProStr
+
+    hasNumStart = False
     numberStr = ''
     for idx in range(lenStr):
         if oriStr[idx] in num_str_start_symbol:
             if not hasNumStart:
-                hasNumStart = True;
- 
+                hasNumStart = True
             numberStr += oriStr[idx]
         else:
             if hasNumStart:
@@ -75,16 +103,15 @@ def changeChineseNumToArab(oriStr):
                 else:
                     numResult = str(chinese2digits(numberStr))
                     numberStr = ''
-                    hasNumStart = False;
+                    hasNumStart = False
                     aProStr += numResult
- 
             aProStr += oriStr[idx]
             pass
- 
+
     if len(numberStr) > 0:
         resultNum = chinese2digits(numberStr)
         aProStr += str(resultNum)
- 
+
     return aProStr
 
 
