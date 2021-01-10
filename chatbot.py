@@ -20,9 +20,12 @@ class ChatBot:
         train2 = pd.read_excel('data/data2.xlsx', engine='openpyxl').iloc[:, :2]
         train2.columns = ["question", "answer"]
 
+        #取data3的问答对
+        train3 = pd.read_excel('data/data3.xlsx', engine='openpyxl').iloc[:, :2]
+        train3.columns = ["question", "answer"]
         # 数据处理
         # 将数据进行拼接 并去除问题重复数据
-        train = pd.concat([train1, train2], axis=0, ignore_index=True)  # 拼接数据
+        train = pd.concat([train1, train2,train3], axis=0, ignore_index=True)  # 拼接数据
         train.dropna(inplace=True)
         train.drop_duplicates(subset="question", keep='first', inplace=True)  # 数据去重
         train.reset_index(inplace=True)
